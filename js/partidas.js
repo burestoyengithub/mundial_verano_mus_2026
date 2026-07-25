@@ -1,3 +1,5 @@
+console.log("partidas.js cargado correctamente");
+
 const selectsPartida = [
     document.getElementById("jugadorA1"),
     document.getElementById("jugadorA2"),
