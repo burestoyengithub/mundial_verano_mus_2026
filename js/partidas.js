@@ -73,7 +73,201 @@ function actualizarSelectores(){
 
 }
 
+// ==============================
+// ACTUALIZAR ELO
+// ==============================
 
+async function actualizarEloPartida(
+    equipoA,
+    equipoB,
+    ganador
+){
+
+    const jugadoresIds =
+    [
+        ...equipoA,
+        ...equipoB
+    ];
+
+
+    const datosJugadores = {};
+
+
+    for(const id of jugadoresIds){
+
+        const doc =
+        await db.collection("players")
+        .doc(id)
+        .get();
+
+
+        datosJugadores[id]={
+            id:id,
+            ...doc.data()
+        };
+
+    }
+
+
+
+    const jugadoresA =
+    equipoA.map(
+        id=>datosJugadores[id]
+    );
+
+
+    const jugadoresB =
+    equipoB.map(
+        id=>datosJugadores[id]
+    );
+
+
+
+    const eloA =
+    getTeamElo(jugadoresA);
+
+
+    const eloB =
+    getTeamElo(jugadoresB);
+
+
+
+    const esperadoA =
+    expectedScore(
+        eloA,
+        eloB
+    );
+
+
+    const esperadoB =
+    expectedScore(
+        eloB,
+        eloA
+    );
+
+
+
+    const batch =
+    db.batch();
+
+
+
+    if(ganador==="A"){
+
+
+        equipoA.forEach(id=>{
+
+
+            const ref =
+            db.collection("players")
+            .doc(id);
+
+
+            batch.update(ref,{
+
+                elo:
+                (datosJugadores[id].elo || 1000)
+                +
+                eloChange(
+                    datosJugadores[id].elo || 1000,
+                    esperadoA,
+                    1
+                )
+
+            });
+
+
+        });
+
+
+
+        equipoB.forEach(id=>{
+
+
+            const ref =
+            db.collection("players")
+            .doc(id);
+
+
+            batch.update(ref,{
+
+                elo:
+                (datosJugadores[id].elo || 1000)
+                +
+                eloChange(
+                    datosJugadores[id].elo || 1000,
+                    esperadoB,
+                    0
+                )
+
+            });
+
+
+        });
+
+
+    }
+    else{
+
+
+        equipoB.forEach(id=>{
+
+
+            const ref =
+            db.collection("players")
+            .doc(id);
+
+
+            batch.update(ref,{
+
+                elo:
+                (datosJugadores[id].elo || 1000)
+                +
+                eloChange(
+                    datosJugadores[id].elo || 1000,
+                    esperadoB,
+                    1
+                )
+
+            });
+
+
+        });
+
+
+
+        equipoA.forEach(id=>{
+
+
+            const ref =
+            db.collection("players")
+            .doc(id);
+
+
+            batch.update(ref,{
+
+                elo:
+                (datosJugadores[id].elo || 1000)
+                +
+                eloChange(
+                    datosJugadores[id].elo || 1000,
+                    esperadoA,
+                    0
+                )
+
+            });
+
+
+        });
+
+
+    }
+
+
+
+    await batch.commit();
+
+}
 
 // ==============================
 // GUARDAR PARTIDA
@@ -158,6 +352,12 @@ document
 await actualizarEstadisticasPartida(
     equipoA,
     equipoB
+);
+
+await actualizarEloPartida(
+    equipoA,
+    equipoB,
+    ganador.value
 );
 
 async function actualizarEstadisticasPartida(equipoA, equipoB){
