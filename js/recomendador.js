@@ -206,11 +206,34 @@ function recommendMatches(players){
 
 
     mejores.sort(
-        (a,b)=>
-        b.score-a.score
-    );
+    (a,b)=>
+    b.score-a.score
+);
 
 
-    return mejores.slice(0,5);
+// Número de partidas necesarias
 
+let numeroPartidas = 0;
+
+
+if(players.length >= 4){
+
+    numeroPartidas = 
+    Math.floor(players.length / 4);
+
+}
+
+
+// máximo 3 partidas (12 jugadores)
+
+numeroPartidas = Math.min(
+    numeroPartidas,
+    3
+);
+
+
+return mejores.slice(
+    0,
+    numeroPartidas
+);
 }
