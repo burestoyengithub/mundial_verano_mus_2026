@@ -2,173 +2,389 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Mundial Verano Mus 2026</title>
 
-    <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Mundial Verano Mus 2026</title>
 
 
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<link rel="stylesheet" href="css/style.css">
+
+
+<!-- Firebase -->
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
 
 </head>
 
 
 <body>
 
-<h1>
-Mundial Verano Mus 2026
-</h1>
+
+<header class="hero">
 
 
-<section>
+    <div class="logo">
+        🏆
+    </div>
 
-<h2>Añadir jugador</h2>
+
+    <h1>
+        Mundial Verano Mus 2026
+    </h1>
+
+
+    <p>
+        Torneo de verano · Clasificación individual
+    </p>
+
+
+</header>
+
+
+
+
+
+<main>
+
+
+
+
+
+<section class="card">
+
+
+<h2>
+⚔️ Registrar partida
+</h2>
+
+
+
+<div class="equipos">
+
+
+<div class="equipo">
+
+
+<h3>
+🔵 Pareja A
+</h3>
+
+
+<select id="jugadorA1">
+
+<option value="">
+Jugador 1
+</option>
+
+</select>
+
+
+<select id="jugadorA2">
+
+<option value="">
+Jugador 2
+</option>
+
+</select>
+
+
+</div>
+
+
+
+
+<div class="vs">
+
+VS
+
+</div>
+
+
+
+
+<div class="equipo">
+
+
+<h3>
+🔴 Pareja B
+</h3>
+
+
+<select id="jugadorB1">
+
+<option value="">
+Jugador 3
+</option>
+
+</select>
+
+
+<select id="jugadorB2">
+
+<option value="">
+Jugador 4
+</option>
+
+select>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="ganador">
+
+
+<h3>
+Ganador
+</h3>
+
+
+<label>
 
 <input 
-    id="nombreJugador"
-    placeholder="Nombre del jugador"
->
+type="radio"
+name="ganador"
+value="A">
+
+Pareja A
+
+</label>
 
 
-<button id="btnJugador">
-Añadir jugador
+
+
+<label>
+
+<input 
+type="radio"
+name="ganador"
+value="B">
+
+Pareja B
+
+</label>
+
+
+
+</div>
+
+
+
+
+<button id="guardarPartida">
+
+Guardar partida
+
 </button>
 
 
+
+</section>
+
+
+
+
+
+
+
+
+<section class="card">
+
+
+<h2>
+🤖 Recomendador de partidas
+</h2>
+
+
+
+<p>
+
+Selecciona los jugadores disponibles:
+
+</p>
+
+
+
+
+<div id="lista-recomendador">
+
+</div>
+
+
+
+
+<button id="generar-recomendacion">
+
+Generar recomendación
+
+</button>
+
+
+
+<div id="resultado-recomendador">
+
+</div>
+
+
+
 </section>
 
 
 
-<section>
 
-<h2>Jugadores</h2>
 
-<ul id="listaJugadores"></ul>
+
+
+
+
+<section class="card estado">
+
+
+<h2>
+📊 Estado del torneo
+</h2>
+
+
+
+
+<div class="estadistica">
+
+
+<span>
+Partidas registradas
+</span>
+
+
+<strong id="total-partidas">
+0
+</strong>
+
+
+</div>
+
+
+
+
+
+<div class="estadistica">
+
+
+<span>
+Jugadores preparados
+</span>
+
+
+<strong id="jugadores-completados">
+0
+</strong>
+
+
+<span>
+/ 12
+</span>
+
+
+</div>
+
+
+
 
 </section>
 
-<h2>Registrar partida</h2>
-
-<div id="partida">
-
-    <h3>Pareja A</h3>
-
-    <select id="jugadorA1">
-        <option value="">Seleccionar jugador</option>
-    </select>
-
-    <select id="jugadorA2">
-        <option value="">Seleccionar jugador</option>
-    </select>
 
 
-    <h3>Pareja B</h3>
-
-    <select id="jugadorB1">
-        <option value="">Seleccionar jugador</option>
-    </select>
-
-    <select id="jugadorB2">
-        <option value="">Seleccionar jugador</option>
-    </select>
 
 
-    <h3>Ganador</h3>
-
-    <label>
-        <input type="radio" name="ganador" value="A">
-        Pareja A
-    </label>
 
 
-    <label>
-        <input type="radio" name="ganador" value="B">
-        Pareja B
-    </label>
 
 
-    <br><br>
-
-    <button id="guardarPartida">
-        Guardar partida
-    </button>
-
-</div>
-
-<h2>Recomendador de partidas</h2>
-
-<div>
-
-    <p>
-        Selecciona jugadores disponibles:
-    </p>
-
-    <div id="lista-recomendador"></div>
+<section class="card">
 
 
-    <button id="generar-recomendacion">
-        Generar recomendación
-    </button>
+<h2>
+📈 Progreso jugadores
+</h2>
 
-
-</div>
-
-
-<h3>Partidas sugeridas</h3>
-
-<div id="resultado-recomendador"></div>
-
-<h2>Estado del torneo</h2>
-
-<div id="estado-torneo">
-
-    <p>
-        Partidas registradas:
-        <span id="total-partidas">0</span>
-    </p>
-
-
-    <p>
-        Jugadores clasificados:
-        <span id="jugadores-completados">0</span>
-        / 12
-    </p>
-
-
-</div>
-
-
-<h2>Progreso jugadores</h2>
 
 
 <table>
 
+
 <thead>
 
 <tr>
-<th>Jugador</th>
-<th>Partidas</th>
+
+<th>
+Jugador
+</th>
+
+
+<th>
+Partidas
+</th>
+
+
 </tr>
 
 </thead>
+
 
 
 <tbody id="progreso-jugadores">
 
 </tbody>
 
+
+
 </table>
 
+
+</section>
+
+
+
+
+
+
+
+</main>
+
+
+
+
+
+
+
+
 <script src="js/firebase.js"></script>
+
 <script src="js/elo.js"></script>
+
 <script src="js/script.js"></script>
+
 <script src="js/partidas.js"></script>
+
 <script src="js/estadisticas.js"></script>
 
 <script src="js/recomendador.js"></script>
+
 <script src="js/recomendador_ui.js"></script>
+
+
+
 </body>
 
 

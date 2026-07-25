@@ -1,185 +1,349 @@
-/* ==========================
-   GENERAL
-========================== */
-
 *{
-    box-sizing:border-box;
+
+box-sizing:border-box;
+
 }
+
 
 
 body{
 
-    margin:0;
 
-    font-family:
-    'Segoe UI',
-    Tahoma,
-    Geneva,
-    Verdana,
-    sans-serif;
+margin:0;
 
-    background:
-    linear-gradient(
-        135deg,
-        #0f172a,
-        #1e293b
-    );
 
-    color:#f8fafc;
+font-family:
 
-    min-height:100vh;
+system-ui,
+-apple-system,
+Segoe UI,
+Roboto,
+sans-serif;
+
+
+
+background:
+
+linear-gradient(
+135deg,
+#052e16,
+#064e3b
+);
+
+
+
+color:white;
+
+
+min-height:100vh;
+
+
+}
+
+
+
+
+/* =====================
+   CABECERA
+===================== */
+
+
+.hero{
+
+
+text-align:center;
+
+
+padding:
+
+35px 20px 20px;
+
 
 }
 
 
-/* ==========================
-   TITULO
-========================== */
+
+.logo{
 
 
-h1{
+font-size:70px;
 
-    text-align:center;
-
-    margin:30px 0;
-
-    font-size:42px;
-
-    letter-spacing:2px;
 
 }
+
+
+
+.hero h1{
+
+
+margin:10px 0;
+
+
+font-size:
+
+clamp(28px,8vw,45px);
+
+
+letter-spacing:1px;
+
+
+}
+
+
+
+.hero p{
+
+
+color:#d1fae5;
+
+
+font-size:18px;
+
+
+}
+
+
+
+
+
+/* =====================
+   CONTENEDORES
+===================== */
+
+
+main{
+
+
+padding:10px;
+
+
+}
+
+
+
+
+.card{
+
+
+background:
+
+rgba(255,255,255,0.12);
+
+
+
+backdrop-filter:
+
+blur(10px);
+
+
+
+border-radius:22px;
+
+
+
+padding:20px;
+
+
+
+margin:20px auto;
+
+
+
+max-width:800px;
+
+
+
+box-shadow:
+
+0 10px 30px rgba(0,0,0,.25);
+
+
+}
+
+
 
 
 h2{
 
-    margin-top:0;
 
-    color:#fde68a;
+margin-top:0;
+
+
+color:#fde68a;
+
+
+text-align:center;
+
 
 }
+
+
 
 
 h3{
 
-    color:#e2e8f0;
+
+text-align:center;
+
 
 }
 
 
 
-/* ==========================
-   SECCIONES
-========================== */
 
 
-section,
-#partida,
-div[id*="recomendador"],
-#estado-torneo{
+/* =====================
+   PARTIDAS
+===================== */
 
 
-    background:
-    rgba(255,255,255,0.08);
+.equipos{
 
 
-    backdrop-filter:
-    blur(10px);
+display:flex;
 
 
-    border-radius:20px;
+align-items:center;
 
 
-    padding:25px;
+gap:12px;
 
-
-    margin:25px auto;
-
-
-    width:90%;
-
-    max-width:900px;
-
-
-    box-shadow:
-    0 10px 30px
-    rgba(0,0,0,0.25);
 
 }
 
 
 
-/* ==========================
-   INPUTS
-========================== */
+.equipo{
 
 
-input,
+flex:1;
+
+
+}
+
+
+
+.vs{
+
+
+font-size:30px;
+
+
+font-weight:bold;
+
+
+color:#facc15;
+
+
+}
+
+
+
+
 select{
 
 
-    width:100%;
-
-    padding:12px;
-
-    margin:8px 0;
+width:100%;
 
 
-    border-radius:10px;
+padding:14px;
 
 
-    border:none;
+margin:8px 0;
 
 
-    background:#f8fafc;
+border-radius:12px;
 
 
-    color:#111827;
+border:none;
 
 
-    font-size:16px;
+font-size:16px;
+
 
 }
 
 
 
-/* ==========================
+.ganador{
+
+
+margin-top:20px;
+
+
+text-align:center;
+
+
+}
+
+
+
+label{
+
+
+display:block;
+
+
+margin:12px;
+
+
+font-size:17px;
+
+
+}
+
+
+
+
+
+/* =====================
    BOTONES
-========================== */
+===================== */
 
 
 button{
 
 
-    background:
-
-    linear-gradient(
-        135deg,
-        #f59e0b,
-        #f97316
-    );
+width:100%;
 
 
-    color:white;
+padding:15px;
 
 
-    border:none;
+margin-top:20px;
 
 
-    padding:12px 25px;
+border:none;
 
 
-    border-radius:12px;
+border-radius:15px;
 
 
-    font-size:16px;
+
+font-size:17px;
 
 
-    cursor:pointer;
+font-weight:bold;
 
 
-    transition:
-    transform .2s,
-    box-shadow .2s;
+
+background:
+
+linear-gradient(
+135deg,
+#f59e0b,
+#ea580c
+);
+
+
+
+color:white;
+
+
+cursor:pointer;
+
+
+transition:.2s;
 
 
 }
@@ -189,142 +353,75 @@ button{
 button:hover{
 
 
-    transform:
-    translateY(-2px);
+transform:
 
+translateY(-2px);
 
-    box-shadow:
-    0 8px 20px
-    rgba(0,0,0,0.3);
 
 }
 
 
 
-/* ==========================
-   LISTAS
-========================== */
+button:active{
 
 
-ul{
+transform:scale(.98);
 
-
-    list-style:none;
-
-
-    padding:0;
 
 }
 
 
 
-li{
-
-
-    background:
-    rgba(255,255,255,0.1);
-
-
-    padding:12px;
-
-
-    border-radius:10px;
-
-
-    margin:8px 0;
-
-}
 
 
 
-/* ==========================
-   TABLA
-========================== */
 
-
-table{
-
-
-    width:90%;
-
-    max-width:900px;
-
-
-    margin:25px auto;
-
-
-    border-collapse:
-    collapse;
-
-
-    background:
-    rgba(255,255,255,0.08);
-
-
-    border-radius:15px;
-
-
-    overflow:hidden;
-
-}
-
-
-
-th{
-
-
-    background:
-    rgba(245,158,11,0.8);
-
-
-    padding:15px;
-
-}
-
-
-
-td{
-
-
-    padding:12px;
-
-
-    text-align:center;
-
-
-    border-bottom:
-    1px solid
-    rgba(255,255,255,0.1);
-
-}
-
-
-
-/* ==========================
-   RADIO BUTTONS
-========================== */
-
-
-label{
-
-
-    display:block;
-
-    margin:10px 0;
-
-}
-
-
-
-/* ==========================
+/* =====================
    RECOMENDADOR
-========================== */
+===================== */
+
+
+#lista-recomendador{
+
+
+display:grid;
+
+
+grid-template-columns:
+
+repeat(2,1fr);
+
+
+gap:10px;
+
+
+}
+
+
+
+#lista-recomendador label{
+
+
+background:
+
+rgba(255,255,255,.1);
+
+
+
+padding:12px;
+
+
+border-radius:12px;
+
+
+}
+
 
 
 #resultado-recomendador{
 
 
-    margin-top:20px;
+margin-top:20px;
 
 
 }
@@ -334,46 +431,236 @@ label{
 .partida-card{
 
 
-    background:
-    rgba(255,255,255,0.12);
+background:
+
+rgba(255,255,255,.1);
 
 
-    padding:20px;
+
+padding:18px;
 
 
-    border-radius:15px;
+
+border-radius:15px;
 
 
-    margin:15px 0;
+
+margin-top:15px;
 
 
 }
 
 
 
-/* ==========================
+
+
+
+
+
+/* =====================
+   ESTADO
+===================== */
+
+
+.estadistica{
+
+
+display:flex;
+
+
+justify-content:center;
+
+
+align-items:center;
+
+
+gap:10px;
+
+
+font-size:18px;
+
+
+margin:15px;
+
+
+}
+
+
+
+
+.estadistica strong{
+
+
+font-size:30px;
+
+
+color:#fde68a;
+
+
+}
+
+
+
+
+
+
+
+
+/* =====================
+   TABLA PROGRESO
+===================== */
+
+
+table{
+
+
+width:100%;
+
+
+border-collapse:collapse;
+
+
+overflow:hidden;
+
+
+border-radius:15px;
+
+
+background:
+
+rgba(255,255,255,.08);
+
+
+}
+
+
+
+
+th{
+
+
+background:
+
+rgba(245,158,11,.8);
+
+
+
+padding:14px;
+
+
+}
+
+
+
+
+td{
+
+
+padding:12px;
+
+
+text-align:center;
+
+
+border-bottom:
+
+1px solid rgba(255,255,255,.1);
+
+
+}
+
+
+
+
+
+
+
+
+
+/* =====================
    MOVIL
-========================== */
+===================== */
 
 
 @media(max-width:600px){
 
 
-    h1{
 
-        font-size:30px;
-
-    }
+.hero{
 
 
-    section,
-    #partida{
+padding-top:25px;
 
-        width:95%;
 
-        padding:18px;
+}
 
-    }
+
+
+.card{
+
+
+padding:16px;
+
+
+}
+
+
+
+.equipos{
+
+
+flex-direction:column;
+
+
+}
+
+
+
+.vs{
+
+
+transform:
+
+rotate(90deg);
+
+
+margin:5px;
+
+
+}
+
+
+
+#lista-recomendador{
+
+
+grid-template-columns:
+
+1fr;
+
+
+}
+
+
+
+button{
+
+
+font-size:18px;
+
+
+}
+
+
+
+table{
+
+
+font-size:15px;
+
+
+}
+
 
 
 }
