@@ -17,15 +17,23 @@ db.collection("players")
 
 
     jugadoresRecomendador =
-    snapshot.docs.map(doc=>({
+snapshot.docs.map(doc=>({
 
-        id:doc.id,
+    id:doc.id,
 
-        nombre:doc.data().nombre,
+    nombre:doc.data().nombre,
 
-        partidas:doc.data().partidas || 0
+    elo:doc.data().elo || 1000,
 
-    }));
+    partidas:doc.data().partidas || 0,
+
+    compañeros:
+    doc.data().compañeros || [],
+
+    rivales:
+    doc.data().rivales || []
+
+}));
 
 
     mostrarJugadores();
@@ -90,10 +98,18 @@ document
 
 
 
-    const recomendaciones =
-    recomendarPartidas(
-        seleccionados
-    );
+    const jugadoresSeleccionados =
+jugadoresRecomendador.filter(
+    j =>
+    seleccionados.includes(j.id)
+);
+
+
+
+const recomendaciones =
+recommendMatches(
+    jugadoresSeleccionados
+);
 
 
     mostrarResultado(
@@ -138,11 +154,11 @@ function mostrarResultado(partidas){
 
 
         <p>
-        ${p.equipoA.join(" + ")}
+        ${p.equipoA.map(j=>j.nombre).join(" + ")}
         <br>
         VS
         <br>
-        ${p.equipoB.join(" + ")}
+        ${p.equipoB.map(j=>j.nombre).join(" + ")}
 
         </p>
 

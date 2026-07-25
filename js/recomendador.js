@@ -1,49 +1,216 @@
-function recomendarPartidas(jugadores){
+function recommendScore(
+    equipoA,
+    equipoB
+){
 
-    let candidatos = [...jugadores];
+    const jugadores =
+    [
+        ...equipoA,
+        ...equipoB
+    ];
 
 
-    if(candidatos.length < 4){
+    // =====================
+    // 70% NECESIDAD
+    // =====================
 
-        return [];
-
-    }
+    let necesidad = 0;
 
 
-    // Mezclar candidatos
-    candidatos.sort(
-        ()=>Math.random()-0.5
+    jugadores.forEach(j=>{
+
+        necesidad +=
+        Math.min(
+            1,
+            j.partidas / 20
+        );
+
+    });
+
+
+    necesidad =
+    1 -
+    necesidad / jugadores.length;
+
+
+
+    // =====================
+    // 10% DIVERSIDAD COMPAÑEROS
+    // =====================
+
+    let diversidadComp = 0;
+
+
+    jugadores.forEach(j=>{
+
+        diversidadComp +=
+        (j.compañeros.length / 11);
+
+    });
+
+
+    diversidadComp /=
+    jugadores.length;
+
+
+
+    // =====================
+    // 10% DIVERSIDAD RIVALES
+    // =====================
+
+    let diversidadRiv = 0;
+
+
+    jugadores.forEach(j=>{
+
+        diversidadRiv +=
+        (j.rivales.length / 11);
+
+    });
+
+
+    diversidadRiv /=
+    jugadores.length;
+
+
+
+    // =====================
+    // 10% EQUILIBRIO ELO
+    // =====================
+
+
+    const eloA =
+    equipoA[0].elo +
+    equipoA[1].elo;
+
+
+    const eloB =
+    equipoB[0].elo +
+    equipoB[1].elo;
+
+
+    const diferencia =
+    Math.abs(
+        eloA-eloB
     );
 
 
-    let partidas=[];
+    const diversidadElo =
+    1 -
+    Math.min(
+        diferencia/400,
+        1
+    );
 
 
-    while(candidatos.length >=4){
+
+    return (
+
+        0.7*necesidad +
+
+        0.1*diversidadComp +
+
+        0.1*diversidadRiv +
+
+        0.1*diversidadElo
+
+    );
+
+}
 
 
-        const grupo =
-        candidatos.splice(0,4);
 
 
-        partidas.push({
-
-            equipoA:[
-                grupo[0],
-                grupo[1]
-            ],
-
-            equipoB:[
-                grupo[2],
-                grupo[3]
-            ]
-
-        });
+function recommendMatches(players){
 
 
+    if(players.length < 4)
+        return [];
+
+
+
+    let mejores = [];
+
+
+
+    // Generamos todas las combinaciones
+    // posibles de equipos
+
+
+    for(let i=0;i<players.length;i++){
+
+        for(let j=i+1;j<players.length;j++){
+
+
+            const parejaA =
+            [
+                players[i],
+                players[j]
+            ];
+
+
+
+            const restantes =
+            players.filter(
+                p =>
+                !parejaA.includes(p)
+            );
+
+
+
+            for(
+                let k=0;
+                k<restantes.length;
+                k++
+            ){
+
+                for(
+                    let l=k+1;
+                    l<restantes.length;
+                    l++
+                ){
+
+
+                    const parejaB =
+                    [
+                        restantes[k],
+                        restantes[l]
+                    ];
+
+
+
+                    const score =
+                    recommendScore(
+                        parejaA,
+                        parejaB
+                    );
+
+
+
+                    mejores.push({
+
+                        equipoA:parejaA,
+
+                        equipoB:parejaB,
+
+                        score:score
+
+                    });
+
+
+                }
+            }
+        }
     }
 
 
-    return partidas;
+
+    mejores.sort(
+        (a,b)=>
+        b.score-a.score
+    );
+
+
+    return mejores.slice(0,5);
 
 }
