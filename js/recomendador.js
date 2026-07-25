@@ -1,7 +1,188 @@
+// =====================================================
+// CALCULA NECESIDAD DE UN JUGADOR
+// =====================================================
+
+function playerNeed(player){
+
+    return Math.max(
+        0,
+        Math.min(
+            1,
+            (20 - player.partidas) / 20
+        )
+    );
+
+}
+
+
+
+// =====================================================
+// DIVERSIDAD DE COMPAÑEROS
+// =====================================================
+
+function companionDiversity(team){
+
+
+    const a = team[0];
+    const b = team[1];
+
+
+    if(
+        !a.compañeros.includes(b.id)
+    ){
+
+        return 1;
+
+    }
+
+
+    return 0;
+
+}
+
+
+
+// =====================================================
+// DIVERSIDAD DE RIVALES
+// =====================================================
+
+function rivalDiversity(teamA,teamB){
+
+
+    let nuevos = 0;
+
+
+    teamA.forEach(a=>{
+
+
+        teamB.forEach(b=>{
+
+
+            if(
+                !a.rivales.includes(b.id)
+            ){
+
+                nuevos++;
+
+            }
+
+
+        });
+
+
+    });
+
+
+    return nuevos / 4;
+
+}
+
+
+
+// =====================================================
+// EQUILIBRIO ELO
+// =====================================================
+
+function eloBalance(teamA,teamB){
+
+
+    const eloA =
+        (teamA[0].elo + teamA[1].elo) / 2;
+
+
+    const eloB =
+        (teamB[0].elo + teamB[1].elo) / 2;
+
+
+
+    const diferencia =
+        Math.abs(
+            eloA - eloB
+        );
+
+
+
+    return 1 -
+        Math.min(
+            diferencia / 600,
+            1
+        );
+
+}
+
+
+
+// =====================================================
+// GANANCIA DE DIVERSIDAD
+// =====================================================
+
+function diversityGain(teamA,teamB){
+
+
+    const jugadores =
+    [
+        ...teamA,
+        ...teamB
+    ];
+
+
+    let nuevasRelaciones = 0;
+
+
+
+    jugadores.forEach(a=>{
+
+
+        jugadores.forEach(b=>{
+
+
+            if(a.id===b.id)
+                return;
+
+
+
+            const yaExiste =
+
+                a.compañeros.includes(b.id)
+                ||
+                a.rivales.includes(b.id);
+
+
+
+            if(!yaExiste){
+
+                nuevasRelaciones++;
+
+            }
+
+
+        });
+
+
+    });
+
+
+
+    // máximo 12 relaciones nuevas
+
+    return Math.min(
+        nuevasRelaciones / 12,
+        1
+    );
+
+}
+
+
+
+// =====================================================
+// SCORE GLOBAL DE UNA PARTIDA
+// =====================================================
+
 function recommendScore(
     equipoA,
     equipoB
 ){
+
 
     const jugadores =
     [
@@ -10,9 +191,10 @@ function recommendScore(
     ];
 
 
-    // =====================
-    // 70% NECESIDAD
-    // =====================
+
+    // ---------------------
+    // 65% NECESIDAD
+    // ---------------------
 
     let necesidad = 0;
 
@@ -20,99 +202,73 @@ function recommendScore(
     jugadores.forEach(j=>{
 
         necesidad +=
-        Math.min(
-            1,
-            j.partidas / 20
+        playerNeed(j);
+
+    });
+
+
+    necesidad /=
+    jugadores.length;
+
+
+
+    // ---------------------
+    // COMPONENTES
+    // ---------------------
+
+    const compañeros =
+        (
+            companionDiversity(equipoA)
+            +
+            companionDiversity(equipoB)
+        )
+        /2;
+
+
+
+    const rivales =
+        rivalDiversity(
+            equipoA,
+            equipoB
         );
 
-    });
 
 
-    necesidad =
-    1 -
-    necesidad / jugadores.length;
-
-
-
-    // =====================
-    // 10% DIVERSIDAD COMPAÑEROS
-    // =====================
-
-    let diversidadComp = 0;
-
-
-    jugadores.forEach(j=>{
-
-        diversidadComp +=
-        (j.compañeros.length / 11);
-
-    });
-
-
-    diversidadComp /=
-    jugadores.length;
+    const elo =
+        eloBalance(
+            equipoA,
+            equipoB
+        );
 
 
 
-    // =====================
-    // 10% DIVERSIDAD RIVALES
-    // =====================
-
-    let diversidadRiv = 0;
-
-
-    jugadores.forEach(j=>{
-
-        diversidadRiv +=
-        (j.rivales.length / 11);
-
-    });
-
-
-    diversidadRiv /=
-    jugadores.length;
-
-
-
-    // =====================
-    // 10% EQUILIBRIO ELO
-    // =====================
-
-
-    const eloA =
-    equipoA[0].elo +
-    equipoA[1].elo;
-
-
-    const eloB =
-    equipoB[0].elo +
-    equipoB[1].elo;
-
-
-    const diferencia =
-    Math.abs(
-        eloA-eloB
-    );
-
-
-    const diversidadElo =
-    1 -
-    Math.min(
-        diferencia/400,
-        1
-    );
+    const diversidad =
+        diversityGain(
+            equipoA,
+            equipoB
+        );
 
 
 
     return (
 
-        0.7*necesidad +
+        0.65 * necesidad
 
-        0.1*diversidadComp +
+        +
 
-        0.1*diversidadRiv +
+        0.10 * compañeros
 
-        0.1*diversidadElo
+        +
+
+        0.10 * rivales
+
+        +
+
+        0.10 * elo
+
+        +
+
+        0.05 * diversidad
 
     );
 
@@ -120,21 +276,15 @@ function recommendScore(
 
 
 
+// =====================================================
+// GENERAR TODAS LAS PARTIDAS POSIBLES
+// =====================================================
 
-function recommendMatches(players){
-
-
-    if(players.length < 4)
-        return [];
-
+function generatePossibleMatches(players){
 
 
-    let mejores = [];
+    let matches=[];
 
-
-
-    // Generamos todas las combinaciones
-    // posibles de equipos
 
 
     for(let i=0;i<players.length;i++){
@@ -151,24 +301,17 @@ function recommendMatches(players){
 
 
             const restantes =
-            players.filter(
-                p =>
-                !parejaA.includes(p)
-            );
+                players.filter(
+                    p =>
+                    !parejaA.includes(p)
+                );
 
 
 
-            for(
-                let k=0;
-                k<restantes.length;
-                k++
-            ){
+            for(let k=0;k<restantes.length;k++){
 
-                for(
-                    let l=k+1;
-                    l<restantes.length;
-                    l++
-                ){
+
+                for(let l=k+1;l<restantes.length;l++){
 
 
                     const parejaB =
@@ -179,61 +322,104 @@ function recommendMatches(players){
 
 
 
-                    const score =
-                    recommendScore(
-                        parejaA,
-                        parejaB
-                    );
-
-
-
-                    mejores.push({
+                    matches.push({
 
                         equipoA:parejaA,
 
                         equipoB:parejaB,
 
-                        score:score
+                        jugadores:
+                        [
+                            ...parejaA,
+                            ...parejaB
+                        ],
+
+                        score:
+                        recommendScore(
+                            parejaA,
+                            parejaB
+                        )
 
                     });
 
 
                 }
+
             }
+
+
         }
+
     }
 
 
 
-    mejores.sort(
-    (a,b)=>
-    b.score-a.score
-);
-
-
-// Número de partidas necesarias
-
-let numeroPartidas = 0;
-
-
-if(players.length >= 4){
-
-    numeroPartidas = 
-    Math.floor(players.length / 4);
+    return matches;
 
 }
 
 
-// máximo 3 partidas (12 jugadores)
 
-numeroPartidas = Math.min(
-    numeroPartidas,
-    3
-);
+// =====================================================
+// RECOMENDADOR PRINCIPAL
+// =====================================================
+
+function recommendMatches(players){
 
 
-return mejores.slice(
-    0,
-    numeroPartidas
-);
+    if(players.length < 4)
+        return [];
+
+
+
+    let posibles =
+        generatePossibleMatches(players);
+
+
+
+    posibles.sort(
+        (a,b)=>
+        b.score-a.score
+    );
+
+
+
+    let seleccionadas=[];
+
+    let usados=[];
+
+
+
+    posibles.forEach(partida=>{
+
+
+        const conflicto =
+            partida.jugadores.some(
+                j =>
+                usados.includes(j.id)
+            );
+
+
+
+        if(!conflicto){
+
+            seleccionadas.push(partida);
+
+
+
+            partida.jugadores.forEach(j=>{
+
+                usados.push(j.id);
+
+            });
+
+        }
+
+
+    });
+
+
+
+    return seleccionadas;
+
 }
