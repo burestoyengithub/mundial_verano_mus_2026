@@ -32,18 +32,23 @@ async()=>{
     }
 
 
-    await db.collection("players").add({
+await db.collection("players").add({
 
-        nombre: nombre,
+    nombre: nombre,
 
-        elo:1000,
+    elo: 1000,
 
-        partidas:0,
+    partidas: 0,
 
-        activo:true
+    activo: true,
 
-    });
+    compañeros: [],
 
+    rivales: [],
+
+    creado: firebase.firestore.FieldValue.serverTimestamp()
+
+});
 
     nombreInput.value="";
 
