@@ -143,20 +143,157 @@ document
 
     await db.collection("matches").add({
 
-        fecha:
-        firebase.firestore.FieldValue.serverTimestamp(),
+    fecha:
+    firebase.firestore.FieldValue.serverTimestamp(),
+
+    equipoA: equipoA,
+
+    equipoB: equipoB,
+
+    ganador:
+    ganador.value
+
+});
+
+await actualizarEstadisticasPartida(
+    equipoA,
+    equipoB
+);
+
+async function actualizarEstadisticasPartida(equipoA, equipoB){
 
 
-        equipoA: equipoA,
-
-        equipoB: equipoB,
-
-        ganador:
-        ganador.value
-
-    });
+    const batch = db.batch();
 
 
+    // Equipo A
+    for(const jugadorId of equipoA){
+
+
+        const ref =
+        db.collection("players").doc(jugadorId);
+
+
+        const doc =
+        await ref.get();
+
+
+        const datos = doc.data();
+
+
+        const nuevosCompaneros =
+        new Set(datos.compañeros || []);
+
+
+        const nuevosRivales =
+        new Set(datos.rivales || []);
+
+
+
+        // compañero
+        equipoA.forEach(id=>{
+
+            if(id !== jugadorId){
+                nuevosCompaneros.add(id);
+            }
+
+        });
+
+
+
+        // rivales
+        equipoB.forEach(id=>{
+
+            nuevosRivales.add(id);
+
+        });
+
+
+
+        batch.update(ref,{
+
+            partidas:
+            (datos.partidas || 0)+1,
+
+
+            compañeros:
+            Array.from(nuevosCompaneros),
+
+
+            rivales:
+            Array.from(nuevosRivales)
+
+        });
+
+
+    }
+
+
+
+    // Equipo B
+    for(const jugadorId of equipoB){
+
+
+        const ref =
+        db.collection("players").doc(jugadorId);
+
+
+        const doc =
+        await ref.get();
+
+
+        const datos = doc.data();
+
+
+        const nuevosCompaneros =
+        new Set(datos.compañeros || []);
+
+
+        const nuevosRivales =
+        new Set(datos.rivales || []);
+
+
+
+        equipoB.forEach(id=>{
+
+            if(id !== jugadorId){
+                nuevosCompaneros.add(id);
+            }
+
+        });
+
+
+
+        equipoA.forEach(id=>{
+
+            nuevosRivales.add(id);
+
+        });
+
+
+
+        batch.update(ref,{
+
+            partidas:
+            (datos.partidas || 0)+1,
+
+
+            compañeros:
+            Array.from(nuevosCompaneros),
+
+
+            rivales:
+            Array.from(nuevosRivales)
+
+        });
+
+
+    }
+
+
+    await batch.commit();
+
+}
 
     alert("Partida guardada");
 
