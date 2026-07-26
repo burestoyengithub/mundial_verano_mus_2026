@@ -58,3 +58,49 @@ function eloChange(
     );
 
 }
+// ======================================
+// APLICAR ELO A UNA PARTIDA
+// ======================================
+
+function applyElo(equipoA, equipoB, ganador){
+
+    const eloA = getTeamElo(equipoA);
+    const eloB = getTeamElo(equipoB);
+
+    const esperadoA = expectedScore(
+        eloA,
+        eloB
+    );
+
+    const esperadoB = expectedScore(
+        eloB,
+        eloA
+    );
+
+    const resultadoA =
+        ganador === "A" ? 1 : 0;
+
+    const resultadoB =
+        ganador === "B" ? 1 : 0;
+
+    const cambioA = eloChange(
+        eloA,
+        esperadoA,
+        resultadoA
+    );
+
+    const cambioB = eloChange(
+        eloB,
+        esperadoB,
+        resultadoB
+    );
+
+    equipoA.forEach(j=>{
+        j.elo += cambioA;
+    });
+
+    equipoB.forEach(j=>{
+        j.elo += cambioB;
+    });
+
+}

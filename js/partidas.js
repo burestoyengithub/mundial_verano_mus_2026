@@ -349,16 +349,7 @@ document
 
 });
 
-await actualizarEstadisticasPartida(
-    equipoA,
-    equipoB
-);
-
-await actualizarEloPartida(
-    equipoA,
-    equipoB,
-    ganador.value
-);
+await recalculateTournament();
 
 async function actualizarEstadisticasPartida(equipoA, equipoB){
 
